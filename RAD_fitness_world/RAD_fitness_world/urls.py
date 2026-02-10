@@ -20,7 +20,7 @@ from shop import views
 app_name = 'ecommerce'
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('shop/', include('shop.urls')),
+    path('', include('shop.urls')),
     path('cart/', include('cart.urls')),
     path('search/', include('search.urls')),
 ]
