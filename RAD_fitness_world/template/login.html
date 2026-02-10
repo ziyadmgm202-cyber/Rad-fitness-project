@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+</head>
+<body>
+    {% load crispy_forms_tags %}
+    <div class="login-page-wrapper d-flex align-items-center justify-content-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="text-center mb-4 animate-fade-up">
+                    <div class="brand-icon-circle mb-3 mx-auto">
+                        <i class="bi bi-shield-lock-fill text-primary fs-3"></i>
+                    </div>
+                    <h2 class="fw-bold">Log In</h2>
+                </div>
+
+                <div class="card border-0 shadow-premium rounded-4 overflow-hidden animate-fade-up delay-1">
+                    <div class="card-body p-4 p-md-5">
+                        <form action="" method="POST" novalidate>
+                            {% csrf_token %}
+
+                            <div class="form-container mb-4">
+                                {{ form|crispy }}
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check small">
+                                    <input class="form-check-input" type="checkbox" id="remember">
+                                    <label class="form-check-label text-muted" for="remember">Remember me</label>
+                                </div>
+                                <a href="#" class="small text-primary text-decoration-none fw-bold">Forgot?</a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-3 shadow-glow mb-3">
+                                Log In
+                            </button>
+
+                            <div class="text-center mt-4">
+                                <p class="small text-muted mb-0">Don't have an account?</p>
+                                <a href="{% url 'signup' %}" class="text-primary fw-bold text-decoration-none">
+                                    Signup <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5 opacity-50 small animate-fade-up delay-2">
+                    <p>&copy; 2025 Rentify Premium Rentals. <br> Protected by reCAPTCHA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Centers the card perfectly on the screen */
+    .login-page-wrapper {
+        min-height: calc(100vh - 120px); /* Adjust based on navbar height */
+        background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.05), transparent);
+    }
+
+    .brand-icon-circle {
+        width: 64px;
+        height: 64px;
+        background: #eff6ff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .shadow-premium {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .shadow-glow {
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2) !important;
+    }
+
+    /* Crispy Form Overrides for Premium Look */
+    .form-control {
+        border-radius: 10px !important;
+        padding: 12px 15px !important;
+        border: 1px solid #e2e8f0 !important;
+        background-color: #f8fafc !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .form-control:focus {
+        background-color: #ffffff !important;
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+    }
+
+    .form-label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #475569;
+        margin-bottom: 8px;
+    }
+
+    /* Animations */
+    .animate-fade-up {
+        animation: fadeUp 0.6s ease forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+
+    @keyframes fadeUp {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .btn-primary {
+        background-color: #2563eb;
+        border: none;
+        transition: 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+        transform: translateY(-2px);
+    }
+</style>
+</body>
+</html>

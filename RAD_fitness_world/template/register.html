@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+    {% load static %}
+{% load crispy_forms_tags %}
+
+<div class="signup-page-wrapper d-flex align-items-center justify-content-center py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-5">
+
+                <div class="text-center mb-4 animate-fade-up">
+                    <div class="brand-icon-circle mb-3 mx-auto">
+                        <i class="bi bi-person-plus-fill text-primary fs-3"></i>
+                    </div>
+                    <h2 class="fw-bold">Signup</h2>
+                    <p class="text-muted">Join Rentify and start your journey today</p>
+                </div>
+
+                <div class="card border-0 shadow-premium rounded-4 overflow-hidden animate-fade-up delay-1">
+                    <div class="card-body p-4 p-md-5">
+                        {% comment %} <div class="d-flex justify-content-center gap-3 mb-4">
+                            <span class="badge bg-light text-dark rounded-pill px-3 py-2 fw-normal border">
+                                <i class="bi bi-shield-check text-success me-1"></i> Secure
+                            </span>
+                            <span class="badge bg-light text-dark rounded-pill px-3 py-2 fw-normal border">
+                                <i class="bi bi-clock text-primary me-1"></i> 1-Min Signup
+                            </span>
+                        </div> {% endcomment %}
+
+                        <form action="" method="POST" novalidate>
+                            {% csrf_token %}
+
+                            <div class="signup-form-grid mb-4">
+                                {{ form|crispy }}
+                            </div>
+
+                            <div class="form-check small mb-4">
+                                <input class="form-check-input" type="checkbox" value="" id="terms" required checked>
+                                <label class="form-check-label text-muted" for="terms">
+                                    I agree to the <a href="#" class="text-primary text-decoration-none">Terms & Conditions</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-3 fw-bold rounded-3 shadow-glow mb-3">
+                                Create Account
+                            </button>
+
+                            <div class="text-center mt-4">
+                                <p class="small text-muted mb-0">Already have an account?</p>
+                                <a href="{% url 'login' %}" class="text-primary fw-bold text-decoration-none">
+                                    Login<i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4 animate-fade-up delay-2">
+                    <p class="x-small text-muted">By signing up, you agree to receive ride updates via email.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .signup-page-wrapper {
+        min-height: calc(100vh - 100px);
+        background: radial-gradient(circle at bottom left, rgba(37, 99, 235, 0.05), transparent);
+    }
+
+    .brand-icon-circle {
+        width: 64px; height: 64px;
+        background: #eff6ff;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+    }
+
+    .shadow-premium {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    /* Crispy Form Field Styling Override */
+    #div_id_username, #div_id_email, #div_id_password1, #div_id_password2 {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-control {
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        border: 1.5px solid #edf2f7 !important;
+        background-color: #f8fafc !important;
+        font-size: 0.95rem;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .form-control:focus {
+        background-color: #ffffff !important;
+        border-color: #2563eb !important;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1) !important;
+    }
+
+    .form-label {
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        margin-bottom: 6px;
+    }
+
+    .btn-primary {
+        background-color: #2563eb;
+        border: none;
+        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+        transform: scale(1.02);
+    }
+
+    .shadow-glow {
+        box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4) !important;
+    }
+
+    /* Animations */
+    .animate-fade-up {
+        animation: fadeUp 0.8s ease forwards;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+
+    @keyframes fadeUp {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .x-small { font-size: 0.75rem; }
+</style>
+</body>
+</html>
+

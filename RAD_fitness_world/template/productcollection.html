@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerFit Gear - Gym Equipment Marketplace</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #2a9d8f;
+            --secondary-color: #264653;
+            --accent-color: #e9c46a;
+            --danger-color: #e76f51;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-brand span {
+            color: var(--danger-color);
+        }
+
+        .category-header {
+            background: linear-gradient(rgba(38, 70, 83, 0.9), rgba(38, 70, 83, 0.95)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .category-title {
+            font-weight: 700;
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-description {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .filter-sidebar {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 20px;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-check-label {
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .price-range {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .product-card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            height: 220px;
+            object-fit: cover;
+            width: 100%;
+            background-color: #f5f5f5;
+        }
+
+        .product-category {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-title {
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin: 0.5rem 0;
+            color: var(--secondary-color);
+        }
+
+        .product-description {
+            color: var(--gray-color);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .product-rating {
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 0.6rem 1.5rem;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: #238277;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            font-weight: 600;
+            border-radius: 8px;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .badge-new {
+            background-color: var(--danger-color);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+        }
+
+        .badge-sale {
+            background-color: var(--accent-color);
+            color: var(--dark-color);
+            font-size: 0.7rem;
+            padding: 0.3rem 0.6rem;
+        }
+
+        .pagination .page-link {
+            color: var(--primary-color);
+            border: none;
+            margin: 0 3px;
+            border-radius: 6px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer h5 {
+            color: var(--accent-color);
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+
+        .footer a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer a:hover {
+            color: var(--accent-color);
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .product-stats {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .stat-number {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+        }
+
+        .sort-dropdown {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .category-title {
+                font-size: 2.2rem;
+            }
+
+            .filter-sidebar {
+                position: static;
+                margin-bottom: 2rem;
+            }
+
+            .product-img {
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-activity me-2"></i>Power<span>Fit</span> Gear
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Strength Equipment</a></li>
+                            <li><a class="dropdown-item" href="#">Cardio Machines</a></li>
+                            <li><a class="dropdown-item active" href="#">Supplements</a></li>
+                            <li><a class="dropdown-item" href="#">Fitness Accessories</a></li>
+                            <li><a class="dropdown-item" href="#">Apparel</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Deals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-primary" href="#">
+                            <i class="bi bi-cart3"></i> Cart <span class="badge bg-light text-dark">3</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Category Header -->
+    <div class="category-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="category-title">Supplements & Nutrition</h1>
+                    <p class="category-description">Fuel your fitness journey with premium supplements, proteins, vitamins, and performance enhancers from top brands. Find exactly what you need to maximize your workouts and recovery.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar with Filters -->
+            <div class="col-lg-3">
+                <div class="filter-sidebar">
+                    <h5 class="filter-title">Filter Products</h5>
+
+                    <!-- Category Filter -->
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-3">Categories</h6>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="proteinCheck" checked>
+                            <label class="form-check-label" for="proteinCheck">
+                                Protein Powders
+                            </label>
+                            <span class="text-muted float-end">(24)</span>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="preworkoutCheck">
+                            <label class="form-check-label" for="preworkoutCheck">
+                                Pre-Workout
+                            </label>
+                            <span class="text-muted float-end">(18)</span>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="vitaminsCheck">
+                            <label class="form-check-label" for="vitaminsCheck">
+                                Vitamins & Minerals
+                            </label>
+                            <span class="text-muted float-end">(32)</span>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="aminoCheck">
+                            <label class="form-check-label" for="aminoCheck">
+                                Amino Acids
+                            </label>
+                            <span class="text-muted float-end">(15)</span>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="weightCheck">
+                            <label class="form-check-label" for="weightCheck">
+                                Weight Management
+                            </label>
+                            <span class="text-muted float-end">(12)</span>
+                        </div>
+                    </div>
+
+                    <!-- Price Range Filter -->
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-3">Price Range</h6>
+                        <input type="range" class="form-range" min="0" max="200" step="5" id="priceRange">
+                        <div class="d-flex justify-content-between">
+                            <span class="price-range">$0</span>
+                            <span class="price-range">$200</span>
+                        </div>
+                        <div class="text-center mt-2">
+                            <span class="badge bg-primary">Selected: $10 - $150</span>
+                        </div>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-3">Brands</h6>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="optimumCheck">
+                            <label class="form-check-label" for="optimumCheck">
+                                Optimum Nutrition
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="muscletechCheck" checked>
+                            <label class="form-check-label" for="muscletechCheck">
+                                MuscleTech
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="dymatizeCheck">
+                            <label class="form-check-label" for="dymatizeCheck">
+                                Dymatize
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="bsnCheck">
+                            <label class="form-check-label" for="bsnCheck">
+                                BSN
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="cellucorCheck">
+                            <label class="form-check-label" for="cellucorCheck">
+                                Cellucor
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-3">Customer Rating</h6>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="rating5">
+                            <label class="form-check-label" for="rating5">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i> & above
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="rating4">
+                            <label class="form-check-label" for="rating4">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i> & above
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="rating3">
+                            <label class="form-check-label" for="rating3">
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                                <i class="bi bi-star-fill text-warning"></i> & above
+                            </label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary w-100">Apply Filters</button>
+                    <button class="btn btn-outline-primary w-100 mt-2">Reset All</button>
+                </div>
+
+                <!-- Category Stats -->
+                <div class="product-stats">
+                    <div class="row">
+                        <div class="col-6 stat-item">
+                            <div class="stat-number">89</div>
+                            <div class="stat-label">Products</div>
+                        </div>
+                        <div class="col-6 stat-item">
+                            <div class="stat-number">24</div>
+                            <div class="stat-label">Brands</div>
+                        </div>
+                        <div class="col-6 stat-item">
+                            <div class="stat-number">4.5</div>
+                            <div class="stat-label">Avg Rating</div>
+                        </div>
+                        <div class="col-6 stat-item">
+                            <div class="stat-number">$49</div>
+                            <div class="stat-label">Avg Price</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="col-lg-9">
+                <!-- Sort and Results Info -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p class="mb-0">Showing <strong>1-9</strong> of <strong>89</strong> products</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <select class="sort-dropdown">
+                            <option>Sort by: Featured</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Customer Rating</option>
+                            <option>Newest Arrivals</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Product Cards -->
+                <div class="row">
+                    <!-- Product 1 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="position-relative">
+                                <img src="https://images.unsplash.com/photo-1594736797933-d1001a50c6f9?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" class="product-img" alt="Whey Protein">
+                                <span class="badge badge-new position-absolute top-0 start-0 m-3">NEW</span>
+                                <span class="badge badge-sale position-absolute top-0 end-0 m-3">-15%</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="product-category">Protein Powder</div>
+                                <h5 class="product-title">Gold Standard 100% Whey</h5>
+                                <p class="product-description">Premium whey protein with 24g of protein per serving. Ideal for muscle recovery and growth.</p>
+                                <div class="product-rating mb-2">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                    <span class="text-muted ms-1">(4.5)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="product-price">$34.99</div>
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-cart-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 2 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="position-relative">
+                                <img src="https://images.unsplash.com/photo-1595435934247-5d33b7f92c70?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" class="product-img" alt="Pre-Workout">
+                                <span class="badge badge-sale position-absolute top-0 end-0 m-3">BEST SELLER</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="product-category">Pre-Workout</div>
+                                <h5 class="product-title">C4 Extreme Energy</h5>
+                                <p class="product-description">Advanced pre-workout formula with 150mg caffeine for intense energy and focus during training.</p>
+                                <div class="product-rating mb-2">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <span class="text-muted ms-1">(4.9)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="product-price">$29.99</div>
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-cart-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 3 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="position-relative">
+                                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" class="product-img" alt="BCAA">
+                            </div>
+                            <div class="card-body">
+                                <div class="product-category">Amino Acids</div>
+                                <h5 class="product-title">Instantized BCAA 2:1:1</h5>
+                                <p class="product-description">Fast-absorbing branched-chain amino acids to support muscle recovery and reduce fatigue.</p>
+                                <div class="product-rating mb-2">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                    <span class="text-muted ms-1">(4.0)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="product-price">$24.99</div>
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-cart-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 4 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="position-relative">
+                                <img src="https://images.unsplash.com/photo-1627225925686-2e5c8b5e5b3d?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" class="product-img" alt="Multivitamin">
+                                <span class="badge badge-new position-absolute top-0 start-0 m-3">NEW</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="product-category">Vitamins & Minerals</div>
+                                <h5 class="product-title">Men's Sport Multivitamin</h5>
+                                <p class="product-description">Comprehensive multivitamin formulated specifically for active men with added antioxidants.</p>
+                                <div class="product-rating mb-2">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                    <span class="text-muted ms-1">(4.5)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="product-price">$19.99</div>
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-cart-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 5 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="position-relative">
+                                <img src="https://images.unsplash.com/photo-1600168072220-bdc2c8d5d7d5?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" class="product-img" alt="Creatine">
+                            </div>
+                            <div class="card-body">
+                                <div class="product-category">Performance</div>
+                                <h5 class="product-title">Micronized Creatine Monohydrate</h5>
+                                <p class="product-description">Ultra-pure creatine to increase strength, power, and muscle mass. 100% micronized for better absorption.</p>
+                                <div class="product-rating mb-2">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <span class="text-muted ms-1">(5.0)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="product-price">$16.99</div>
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-cart-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product 6 -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card product-card">
+                            <div class="position-relative">
+                                <img src="https://images.unsplash.com/photo-1627225924765-552d49cf47ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" class="product-img" alt="Fat Burner">
+                            </div>
+                            <div class="card-body">
+                                <div class="product-category">Weight Management</div>
+                                <h5 class="product-title">Thermogenic Fat Burner</h5>
+                                <p class="product-description">Advanced formula to boost metabolism, increase energy, and support weight loss goals.</p>
+                                <div class="product-rating mb-2">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                    <span class="text-muted ms-1">(4.0)</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="product-price">$39.99</div>
+                                    <button class="btn btn-primary">
+                                        <i class="bi bi-cart-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Product pagination" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link" href="#">5</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>PowerFit Gear</h5>
+                    <p>Your ultimate destination for premium gym equipment, supplements, and fitness accessories. We're dedicated to helping you achieve your fitness goals.</p>
+                    <div class="mt-3">
+                        <a href="#" class="me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="me-3"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#"><i class="bi bi-youtube fs-5"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Shop Categories</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Strength Equipment</a></li>
+                        <li><a href="#">Cardio Machines</a></li>
+                        <li><a href="#">Supplements</a></li>
+                        <li><a href="#">Fitness Accessories</a></li>
+                        <li><a href="#">Apparel & Shoes</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Customer Service</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                        <li><a href="#">Returns & Exchanges</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Size Guides</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Stay Updated</h5>
+                    <p>Subscribe to our newsletter for the latest products, deals, and fitness tips.</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Your email">
+                        <button class="btn btn-primary" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 PowerFit Gear. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        // Price range display
+        const priceRange = document.getElementById('priceRange');
+        const priceDisplay = document.querySelector('.price-range:nth-child(2)');
+
+        priceRange.addEventListener('input', function() {
+            priceDisplay.textContent = '$' + this.value;
+        });
+
+        // Product card hover effect enhancement
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Filter application simulation
+        document.querySelector('.btn-primary.w-100').addEventListener('click', function() {
+            alert('Filters applied! This would update the product listing in a real application.');
+        });
+    </script>
+</body>
+</html>
