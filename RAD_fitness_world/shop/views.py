@@ -9,6 +9,13 @@ class HomeView(View):
     def get(self,request):
         catogories=Category.objects.all()
         return render(request,'index.html',{'catogories':catogories})
+    
+    
+    
+class Product(View):
+    def get(self,request,i):
+        b=Category.objects.get(id=i)
+        return render(request,'productcollection.html',{'category':b})
 
 
 
