@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('shop.urls')),
     path('cart/', include('cart.urls')),
     path('search/', include('search.urls')),
+    path('adminpage/',include('adminpage.urls'))
 ]
 from django.conf.urls.static import static
 from django.conf import settings

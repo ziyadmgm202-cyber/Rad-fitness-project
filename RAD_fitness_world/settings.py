@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'search',
     'crispy_bootstrap5',
     'crispy_forms',
+    'adminpage',
 
 ]
 

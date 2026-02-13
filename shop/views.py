@@ -64,7 +64,7 @@ class LoginView(View):
             login(request, user)
             messages.success(request, "Login successful")
             if user.is_superuser:
-                return redirect('admin-dashboard')
+                return redirect('add_items')
             return redirect('home')
         else:
             messages.error(request, "form not valid")
