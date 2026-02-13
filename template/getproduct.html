@@ -150,6 +150,78 @@
         transform: translateY(-3px);
         box-shadow: 0 10px 20px rgba(255, 95, 0, 0.3);
     }
+
+    /* Card Core */
+.product-card {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 15px;
+    z-index: 1;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Image Control */
+.product-image-wrapper {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #fdfdfd;
+    border-radius: 15px 15px 0 0;
+}
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 'contain' is safer for varied product shapes, 'cover' for lifestyle shots */
+    padding: 10px;
+    transition: transform 0.6s ease;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.1);
+}
+
+/* Overlay Effect */
+.product-action-overlay {
+    position: absolute;
+    bottom: -50px;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.05));
+    display: flex;
+    justify-content: center;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.product-card:hover .product-action-overlay {
+    bottom: 0;
+    opacity: 1;
+}
+
+/* Typography Fixes */
+.product-name {
+    font-size: 0.95rem;
+    height: 2.6rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: #2d3436;
+}
+
+/* Icon Button Pulse */
+.btn-primary.rounded-circle {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
 </style>
 
 <div class="container product-container">
@@ -214,6 +286,89 @@
                     </div>
                 </div>
             </div>
+
+
+
+            <div class="container mt-5 pt-4">
+                <h3 class="mb-4 fw-bold text-dark border-start border-4 border-primary ps-3">
+                    Related Products
+                </h3>
+                <div class="row g-4">
+                    {% for i in random_products %}
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                        <div class="card product-card h-100 border-0 shadow-sm">
+                            
+                            <div class="product-image-wrapper position-relative">
+                                <a href="{% url 'get-product' i.id %}">
+                                    <img src="{{ i.image.url|default:'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400' }}" 
+                                         class="card-img-top product-img" alt="{{ i.name }}">
+                                </a>
+                                
+                                {% if i.discount_percentage %}
+                                <span class="badge bg-danger position-absolute top-0 start-0 m-3 shadow-sm">
+                                    {{ i.discount_percentage }}% OFF
+                                </span>
+                                {% endif %}
+            
+                                <div class="product-action-overlay">
+                                    <a href="{% url 'get-product' i.id %}" class="btn btn-light btn-sm rounded-pill px-3 shadow-sm">
+                                        <i class="bi bi-eye me-1"></i> Quick View
+                                    </a>
+                                </div>
+                            </div>
+            
+                            <div class="card-body d-flex flex-column p-3">
+                                <small class="text-uppercase text-muted fw-bold mb-1" style="font-size: 0.7rem; letter-spacing: 1px;">
+                                    {{ i.category|default:"Trending" }}
+                                </small>
+            
+                                <a href="{% url 'get-product' i.id %}" class="text-decoration-none">
+                                    <h6 class="fw-bold text-dark mb-2 product-name">
+                                        {{ i.name|truncatechars:45 }}
+                                    </h6>
+                                </a>
+            
+                                <div class="mb-3 small">
+                                    <span class="text-warning">
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-fill"></i>
+                                        <i class="bi bi-star-half"></i>
+                                    </span>
+                                    <span class="text-muted ms-2">({{ i.review_count|default:"24" }})</span>
+                                </div>
+                                
+                                <div class="mt-auto d-flex align-items-center justify-content-between">
+                                    <div>
+                                        {% if i.discount_price %}
+                                            <span class="fw-bold text-dark fs-5">₹{{ i.discount_price }}</span>
+                                            <span class="text-muted text-decoration-line-through ms-1 small">₹{{ i.price }}</span>
+                                        {% else %}
+                                            <span class="fw-bold text-dark fs-5">₹{{ i.price }}</span>
+                                        {% endif %}
+                                    </div>
+                                    <button class="btn btn-primary btn-sm rounded-circle shadow-sm">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-5">
+                        <div class="p-5 bg-light rounded-3">
+                            <i class="bi bi-search display-4 text-muted"></i>
+                            <h4 class="text-muted mt-3">No matching items</h4>
+                            <p class="text-muted">We couldn't find any related products right now.</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 </div>

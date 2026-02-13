@@ -16,8 +16,13 @@ def cartcount(request):
 from random import sample
 from .models import Product
 
+
 def random_category_products(request):
-    all_products = list(Product.objects.filter(available=True))
+
+    # Get only products that are in stock
+    all_products = list(Product.objects.filter(stock__gt=0))
+
+    # Pick 6 random products
     random_products = sample(all_products, min(len(all_products), 6))
 
     return {
