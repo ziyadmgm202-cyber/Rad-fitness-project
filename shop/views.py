@@ -5,6 +5,7 @@ from django.contrib import messages
 from .models import Category,Product
 
 
+
 class HomeView(View):
     def get(self,request):
         catogories=Category.objects.all()
@@ -60,7 +61,7 @@ class LoginView(View):
             user = authenticate(request, username=u, password=p)
             if user is None:
                 messages.error(request, "invalid username or password")
-                return redirect('login')
+                return redirect('home')
             login(request, user)
             messages.success(request, "Login successful")
             if user.is_superuser:

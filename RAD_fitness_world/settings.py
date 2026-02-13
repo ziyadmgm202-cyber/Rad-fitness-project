@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-LOGIN_URL="shop:login"
+LOGIN_URL="login"
 ROOT_URLCONF = 'RAD_fitness_world.urls'
 import os
 TEMPLATES = [

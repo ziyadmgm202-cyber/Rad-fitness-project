@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .order-card {
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        border: 1px solid #edf2f7;
+    }
+    .order-header {
+        background-color: #f8f9fa;
+        border-radius: 15px 15px 0 0;
+        padding: 1.5rem;
+    }
+    .status-badge {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 0.5em 1.2em;
+    }
+    .product-img-mini {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        background: #f1f1f1;
+    }
+    .table-custom {
+        margin-bottom: 0;
+    }
+    .table-custom th {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: #adb5bd;
+        font-weight: 600;
+        border-top: none;
+    }
+    .order-footer {
+        border-top: 1px dashed #dee2e6;
+        padding-top: 1rem;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark">My Orders</h2>
+        <span class="badge bg-primary rounded-pill">{{ orders|length }} Orders Total</span>
+    </div>
+
+    {% if orders %}
+        <div class="row">
+            {% for order in orders %}
+            <div class="col-12 mb-4">
+                <div class="card order-card shadow-sm">
+                    <div class="order-header d-flex flex-wrap justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted small">Order ID</span>
+                            <h5 class="fw-bold mb-0">#{{ order.order_id }}</h5>
+                        </div>
+                        <div class="text-md-end mt-2 mt-md-0">
+                            <span class="text-muted small d-block">Ordered on</span>
+                            <span class="fw-semibold">{{ order.ordered_date|date:"d M Y" }}</span>
+                        </div>
+                        <div class="mt-2 mt-md-0">
+                            {% if order.delivery_status == 'Delivered' %}
+                                <span class="badge status-badge bg-success-subtle text-success rounded-pill">
+                                    <i class="bi bi-check-circle-fill me-1"></i> {{ order.delivery_status }}
+                                </span>
+                            {% elif order.delivery_status == 'Pending' %}
+                                <span class="badge status-badge bg-warning-subtle text-warning rounded-pill">
+                                    <i class="bi bi-clock-history me-1"></i> {{ order.delivery_status }}
+                                </span>
+                            {% else %}
+                                <span class="badge status-badge bg-primary-subtle text-primary rounded-pill">
+                                    <i class="bi bi-truck me-1"></i> {{ order.delivery_status }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-lg-4 border-end border-light">
+                                <h6 class="fw-bold text-uppercase small text-muted mb-3">Shipping Details</h6>
+                                <p class="mb-1"><strong>Address:</strong> {{ order.address }}</p>
+                                <p class="mb-0"><strong>Phone:</strong> {{ order.phone }}</p>
+                                <p class="mt-2 mb-0"><small class="text-muted text-uppercase">Payment:</small> <span class="badge bg-light text-dark border">{{ order.payment_method }}</span></p>
+                            </div>
+
+                            <div class="col-lg-8 ps-lg-4">
+                                <h6 class="fw-bold text-uppercase small text-muted mb-3">Items Ordered</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-custom align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-end">Total Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order.products.all %}
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="{{ item.product.image.url|default:'https://via.placeholder.com/60' }}" class="product-img-mini me-3 shadow-sm">
+                                                        <span class="fw-semibold text-dark">{{ item.product.name }}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">x{{ item.quantity }}</td>
+                                                <td class="text-end fw-bold">₹{{ item.product.price }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-footer d-flex justify-content-between align-items-center mt-4">
+                            <div class="text-end">
+                                <span class="text-muted me-2">Grand Total:</span>
+                                <span class="fs-4 fw-bold text-primary">₹{{ order.amount }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="p-5 bg-white rounded-4 shadow-sm">
+                <i class="bi bi-bag-x display-1 text-muted"></i>
+                <h3 class="mt-3 fw-bold">No orders found</h3>
+                <p class="text-muted">Looks like you haven't placed any orders yet.</p>
+                <a href="/" class="btn btn-primary rounded-pill px-4">Start Shopping</a>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

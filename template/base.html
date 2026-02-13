@@ -44,28 +44,7 @@
             RAD FITTNESS
             </span>
           </a>
-          <div class="contact_nav" id="">
-            <ul class="navbar-nav ">
-              <li class="nav-item">
-                <a class="nav-link" href="service.html">
-                  <img src="{% static 'images/location.png' %}" alt="" />
-                  <span>Location</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="service.html">
-                  <img src="{% static 'images/call.png' %}" alt="" />
-                  <span>Call : + 01 1234567890</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="service.html">
-                  <img src="{% static 'images/envelope.png' %}" alt="" />
-                  <span>demo@gmail.com</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+  
         </nav>
       </div>
 
@@ -84,6 +63,27 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <div class="d-flex  flex-column flex-lg-row align-items-center">
                 <ul class="navbar-nav  ">
+                  
+                  {% if user.is_authenticated %}
+                    <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="about.html">About </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="service.html">Services </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cartview' %}">Cart</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href=" {% url 'orderdetail' %}">Your order</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href=" {% url 'logout' %}">Logout</a>
+                  </li>
+                  {% else %}
                   <li class="nav-item active">
                     <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
                   </li>
@@ -94,14 +94,11 @@
                     <a class="nav-link" href="service.html">Services </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="contact.html">Contact Us</a>
+                    <a class="nav-link" href=" {% url 'login' %}">Login</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href=" {% url 'logout' %}">Logout</a>
-                  </li>
+                  {% endif %}
+                    
+                  
                 </ul>
                 <form class="form-inline my-2 my-lg-0 ml-0 ml-lg-4 mb-3 mb-lg-0">
                   <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit"></button>

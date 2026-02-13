@@ -13,8 +13,9 @@ import uuid
 from django.conf import settings
 
 
-# Create your views here.
 
+# Create your views here.
+@method_decorator(login_required,name="dispatch")
 class AddToCartView(View):
     def get(self, request,i):
         p=Product.objects.get(id=i)
@@ -27,7 +28,8 @@ class AddToCartView(View):
             c = Cart.objects.create(user=u,product=p,quantity=1)
             c.save()
         return redirect('cartview')
-
+    
+@method_decorator(login_required,name="dispatch")
 class CartView(View):
     def get(self, request):
         u=request.user
@@ -38,6 +40,8 @@ class CartView(View):
         print(c)
         context = {'cart':c,'total':sum}
         return render(request, 'cart.html',context)
+    
+@method_decorator(login_required,name="dispatch")
 class DecrementCartView(View):
     def get(self, request,i):
         c = Cart.objects.get(id=i)
@@ -48,6 +52,8 @@ class DecrementCartView(View):
             c.delete()
         return redirect('cartview')
 
+
+@method_decorator(login_required,name="dispatch")
 class Increment_cart(View):
     def get(self,request,i):
         p=Cart.objects.get(id=i)
@@ -56,7 +62,7 @@ class Increment_cart(View):
         return redirect('cartview')
 
 
-
+@method_decorator(login_required,name="dispatch")
 class DeleteProduct(View):
     def get(self, request,i):
         c=Cart.objects.get(id=i)
@@ -71,6 +77,10 @@ from .models import Cart, Order, Order_items
 from .forms import OrderForm
 from django.db import transaction
 
+
+
+
+@method_decorator(login_required,name="dispatch")
 class CheckoutView(View):
     def get(self, request):
         u = request.user
@@ -164,6 +174,8 @@ from django.db import transaction
 from cart.models import Order, Cart, Order_items
 from django.conf import settings
 
+
+@method_decorator(login_required,name="dispatch")
 @method_decorator(csrf_exempt, name='dispatch')
 class Paymentsuccess(View):
 
@@ -218,7 +230,7 @@ class Paymentsuccess(View):
             'razorpay_key': settings.RAZORPAY_KEY_ID 
         })
 
-
+@method_decorator(login_required,name="dispatch")
 class OrderDetailView(View):
     def get(self, request):
         u=request.user

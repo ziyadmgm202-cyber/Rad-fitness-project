@@ -6,8 +6,25 @@ from django.db.models import Sum
 from django.contrib.auth.models import User
 from cart.models import Order
 from .forms import CategoryForm, ProductForm
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
+
+
+def admin_required(fun):
+    def wrapper(request):
+        if not request.user.is_superuser:
+            return HttpResponse('not allowed')
+        else:
+            return fun(request)
+    return wrapper
+
+
+
+@method_decorator(admin_required,name="dispatch")
+@method_decorator(login_required,name="dispatch")
 class AddItemsView(View):
 
     template_name = "admin/add_items.html"
