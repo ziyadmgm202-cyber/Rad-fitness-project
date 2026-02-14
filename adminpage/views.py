@@ -108,7 +108,7 @@ class AddItemsView(View):
             if category_form.is_valid():
                 category_form.save()
                 messages.success(request, "Category added successfully ✅")
-                return redirect("shop:add_items")
+                return redirect("add_items")
 
         elif "pro_submit" in request.POST:
             product_form = ProductForm(request.POST, request.FILES, prefix="pro")
@@ -116,7 +116,7 @@ class AddItemsView(View):
             if product_form.is_valid():
                 product_form.save()
                 messages.success(request, "Product added successfully ✅")
-                return redirect("shop:add_items")
+                return redirect("add_items")
 
         # Reload orders if form invalid
         orders = Order.objects.all().order_by("-ordered_date")

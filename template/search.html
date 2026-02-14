@@ -1,0 +1,182 @@
+
+{% extends "base.html" %}
+{% load static %}
+
+{% block shib %}
+
+
+<div class="all-title-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>PRODUCT</h2>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock  %}
+
+{% block content %}
+
+<style>
+    /* Container Reset */
+.container.border.border-2.shadow {
+    border: none !important;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 3rem !important;
+}
+
+/* Header Styling */
+h2.tex-center { /* Matching your 'tex-center' typo */
+    text-align: center;
+    font-size: 1.5rem;
+    color: #888;
+    margin-bottom: 3rem;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+h2.tex-center span {
+    color: #222;
+    font-weight: 800;
+    font-style: italic;
+    border-bottom: 3px solid #d33b33;
+}
+
+/* Product Row Card */
+.about-box-main {
+    padding: 40px 0;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.about-box-main:hover {
+    background: #fafafa;
+    transform: scale(1.01);
+}
+
+.about-box-main:last-child {
+    border-bottom: none;
+}
+
+/* Image Polish */
+.about-box-main img.img-fluid {
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: transform 0.5s ease;
+    max-height: 350px;
+    object-fit: contain;
+    background-color: #fff;
+}
+
+.about-box-main:hover img.img-fluid {
+    transform: scale(1.03);
+}
+
+/* Typography */
+.noo-sh-title-top {
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+}
+
+.about-box-main p {
+    color: #666;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+}
+
+.text-success.mt-3 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #28a745 !important;
+}
+
+/* Button & Action Styling */
+.btn.hvr-hover {
+    background: #d33b33; /* Update to your primary theme color */
+    color: #fff !important;
+    padding: 14px 35px;
+    border-radius: 50px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: none;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.btn.hvr-hover:hover {
+    background: #222;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    transform: translateY(-3px);
+}
+
+/* Out of Stock Badge */
+.text-danger b {
+    background: #fff0f0;
+    color: #e03131;
+    padding: 8px 20px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    border: 1px solid #ffc9c9;
+}
+
+/* Empty State Styling */
+h1:only-of-type {
+    text-align: center;
+    color: #ccc;
+    padding: 100px 0;
+    font-weight: 300;
+    font-style: italic;
+}
+</style>
+
+<div class="container border border-2 p-5 shadow ui-widget-shadow mt-5 mb-5">
+
+
+<h2 class="tex-center">You have searched for <span>{{query}}</span></h2>
+    {% for get in result %}
+        <div class="about-box-main">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <img class="img-fluid" src="{{ get.image.url }}" alt="">
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="noo-sh-title-top">{{ get.name }}</h2>
+                    <p>{{ get.descriptions }}</p>
+                    <h3 class="text-success mt-3">₹ {{ get.price }}</h3>
+                    {% if user.is_superuser %}
+                    <a class="btn hvr-hover mt-4" href="">Add stock</a>
+                    {% else %}
+                    {% if get.stock > 0 %}
+                        <a class="btn hvr-hover mt-4">Add to cart</a>
+                    {% else %}
+                    <h3 class=" mt-4 text-danger"><b>out of stock</b></h3>
+                        <a ></a>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <h1>No product found</h1>
+    {% endfor %}
+</div>
+
+{% endblock content %}
