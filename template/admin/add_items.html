@@ -187,7 +187,7 @@
                                 <th>Customer</th>
                                 <th>Status</th>
                                 <th>Date</th>
-                                <th>Action</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -197,7 +197,7 @@
                             <td>{{ order.user.username }}</td>
                             <td><span class="badge bg-secondary">{{ order.delivery_status }}</span></td>
                             <td>{{ order.ordered_date|date:"d M Y" }}</td>
-                            <td><a href="#" class="btn btn-sm btn-outline-primary">View</a></td>
+                            
                         </tr>
                         {% endfor %}
                         </tbody>

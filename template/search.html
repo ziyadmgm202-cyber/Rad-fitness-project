@@ -161,11 +161,10 @@ h1:only-of-type {
                     <p>{{ get.descriptions }}</p>
                     <h3 class="text-success mt-3">₹ {{ get.price }}</h3>
                     {% if get.stock > 0 %}
-                        <a class="btn hvr-hover mt-4">Add to cart</a>
+                        <a class="btn hvr-hover mt-4" href="{% url 'addtocart' get.id %}">Add to cart</a>
                     {% else %}
                     <h3 class=" mt-4 text-danger"><b>out of stock</b></h3>
                         <a ></a>
-                    {% endif %}
                     {% endif %}
                 </div>
             </div>
