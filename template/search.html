@@ -160,9 +160,6 @@ h1:only-of-type {
                     <h2 class="noo-sh-title-top">{{ get.name }}</h2>
                     <p>{{ get.descriptions }}</p>
                     <h3 class="text-success mt-3">₹ {{ get.price }}</h3>
-                    {% if user.is_superuser %}
-                    <a class="btn hvr-hover mt-4" href="">Add stock</a>
-                    {% else %}
                     {% if get.stock > 0 %}
                         <a class="btn hvr-hover mt-4">Add to cart</a>
                     {% else %}

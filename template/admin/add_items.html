@@ -11,8 +11,8 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-light); }
         
         /* Sidebar */
-        .sidebar { width: 260px; height: 100vh; position: fixed; background: #fff; border-right: 1px solid #eef2f6; transition: 0.3s; }
-        .nav-link { color: #6c757d; padding: 12px 20px; border-radius: 10px; margin: 5px 15px; display: flex; align-items: center; cursor: pointer; }
+        .sidebar { width: 260px; height: 100vh; position: fixed; background: #fff; border-right: 1px solid #eef2f6; transition: 0.3s; z-index: 1000; }
+        .nav-link { color: #6c757d; padding: 12px 20px; border-radius: 10px; margin: 5px 15px; display: flex; align-items: center; cursor: pointer; text-decoration: none; }
         .nav-link:hover, .nav-link.active { background: var(--primary-color); color: white !important; }
         .nav-link i { margin-right: 12px; font-size: 1.1rem; }
 
@@ -24,6 +24,10 @@
         .card { border: none; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .form-control, .form-select { border-radius: 8px; padding: 10px; border: 1px solid #e0e0e0; }
         
+        /* Product Images */
+        .img-thumbnail-alt { width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
+        .preview-container img { max-width: 100%; border-radius: 10px; margin-top: 10px; display: none; border: 2px dashed #ddd; padding: 5px; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 992px) { .sidebar { margin-left: -260px; } .main-content { margin-left: 0; } }
     </style>
@@ -35,10 +39,10 @@
             <h4 class="fw-bold text-primary">SHOP ADMIN</h4>
         </div>
         <div class="nav flex-column">
-            <div class="nav-link active" onclick="showSection('dashboard')"><i class="bi bi-grid-1x2"></i> Dashboard</div>
-            <div class="nav-link" onclick="showSection('addProduct')"><i class="bi bi-plus-square"></i> Add Product</div>
-            <div class="nav-link" onclick="showSection('addCategory')"><i class="bi bi-tag"></i> Add Category</div>
-            <div class="nav-link" onclick="showSection('viewOrders')"><i class="bi bi-cart-check"></i> View Orders</div>
+            <div class="nav-link active" id="nav-dashboard" onclick="showSection('dashboard')"><i class="bi bi-grid-1x2"></i> Dashboard</div>
+            <div class="nav-link" id="nav-addProduct" onclick="showSection('addProduct')"><i class="bi bi-plus-square"></i> Add Product</div>
+            <div class="nav-link" id="nav-addCategory" onclick="showSection('addCategory')"><i class="bi bi-tag"></i> Add Category</div>
+            <div class="nav-link" id="nav-viewOrders" onclick="showSection('viewOrders')"><i class="bi bi-cart-check"></i> View Orders</div>
             <hr class="mx-3">
             <a href="/" class="nav-link text-secondary"><i class="bi bi-house"></i> View Website</a>
         </div>
@@ -48,97 +52,124 @@
         
         <div id="dashboard" class="content-section active">
             <h3 class="fw-bold mb-4">Performance Overview</h3>
-        
             <div class="row g-4 mb-4">
-        
-                <!-- 💰 Total Revenue -->
                 <div class="col-md-4">
                     <div class="card p-4 bg-primary text-white shadow-sm">
                         <h6>Total Revenue</h6>
                         <h2>₹{{ total_revenue }}</h2>
                     </div>
                 </div>
-        
-                <!-- 📦 Active Orders -->
                 <div class="col-md-4">
                     <div class="card p-4 bg-dark text-white shadow-sm">
                         <h6>Active Orders</h6>
                         <h2>{{ pending_orders }} Pending</h2>
                     </div>
                 </div>
-        
-                <!-- 👥 Total Users -->
                 <div class="col-md-4">
                     <div class="card p-4 bg-info text-white shadow-sm">
                         <h6>Total Users</h6>
                         <h2>{{ total_users }}</h2>
                     </div>
                 </div>
-        
             </div>
-        
-            <!-- 🆕 Recent Activity -->
             <div class="card p-4 shadow-sm">
                 <h5>Recent Activity</h5>
-                <p class="text-muted small">Real-time store updates appear here.</p>
-        
                 {% if latest_order %}
                 <div class="border-start border-2 border-primary ps-3 py-2">
-                    <strong>New Order #{{ latest_order.order_id }}</strong>
-                    - ₹{{ latest_order.amount }}
-                    by {{ latest_order.user.username }}
-                    <small class="text-muted">
-                        ({{ latest_order.ordered_date|timesince }} ago)
-                    </small>
+                    <strong>New Order #{{ latest_order.order_id }}</strong> - ₹{{ latest_order.amount }}
+                    <small class="text-muted">({{ latest_order.ordered_date|timesince }} ago)</small>
                 </div>
                 {% else %}
                 <p class="text-muted">No recent orders.</p>
                 {% endif %}
             </div>
         </div>
-        
 
         <div id="addProduct" class="content-section">
-            <h3 class="fw-bold mb-4">Add New Product</h3>
-            <div class="container px-0">
-                <div class="row">
-                    <div class="col-md-12">
-                        <form method="POST" enctype="multipart/form-data" class="card p-4 shadow">
-                            {% csrf_token %}
-                            <h4 class="mb-3">Add Product</h4>
-                            
-                            {{ product_form.as_p }}
-                            
-                            <button type="submit" name="pro_submit" class="btn btn-success w-100">
-                                Save Product
-                            </button>
-                        </form>
+            <h3 class="fw-bold mb-4">{% if edit_id %} Edit Product {% else %} Add New Product {% endif %}</h3>
+            <div class="row g-4">
+                <div class="col-md-5">
+                    <form method="POST" enctype="multipart/form-data" class="card p-4 shadow">
+                        {% csrf_token %}
+                        <h5 class="mb-3">Product Details</h5>
+                        
+                        {{ product_form.as_p }}
+
+                        {% if edit_id %}
+                            <input type="hidden" name="edit_id" value="{{ edit_id }}">
+                        {% endif %}
+
+                        <div class="preview-container text-center">
+                            <img id="imagePreview" src="#" alt="Preview">
+                        </div>
+                        
+                        <button type="submit" name="pro_submit" class="btn btn-success w-100 mt-3">
+                            {% if edit_id %} Update Product {% else %} Save Product {% endif %}
+                        </button>
+                        {% if edit_id %}
+                            <a href="?" class="btn btn-link w-100 mt-2 text-decoration-none text-muted">Cancel Edit</a>
+                        {% endif %}
+                    </form>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="card p-4 shadow">
+                        <h5 class="mb-3">Inventory</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product in products %}
+                                    <tr>
+                                        <td>
+                                            {% if product.image %}
+                                                <img src="{{ product.image.url }}" class="img-thumbnail-alt">
+                                            {% else %}
+                                                <div class="bg-light img-thumbnail-alt d-flex align-items-center justify-content-center text-muted" style="font-size: 10px;">No Img</div>
+                                            {% endif %}
+                                        </td>
+                                        <td><strong>{{ product.name }}</strong></td>
+                                        <td>₹{{ product.price }}</td>
+                                        <td class="text-end">
+                                            <a href="?edit={{ product.id }}" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></a>
+                                            <a href="?delete={{ product.id }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')"><i class="bi bi-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="4" class="text-center text-muted py-4">No products found</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="addCategory" class="content-section">
-            <h3 class="fw-bold mb-4">Manage Categories</h3>
+            <h3 class="fw-bold mb-4">Categories</h3>
             <div class="row g-4">
                 <div class="col-md-5">
                     <form method="POST" enctype="multipart/form-data" class="card p-4 shadow">
                         {% csrf_token %}
-                        <h4 class="mb-3">Add Category</h4>
-                        
                         {{ category_form.as_p }}
-                        
-                        <button type="submit" name="cat_submit" class="btn btn-primary w-100">
-                            Save Category
-                        </button>
+                        <button type="submit" name="cat_submit" class="btn btn-primary w-100">Save Category</button>
                     </form>
                 </div>
                 <div class="col-md-7">
-                    <div class="card p-4">
+                    <div class="card p-4 shadow">
                         <h6>Active Categories</h6>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between">Electronics <span class="badge bg-light text-dark">45 Items</span></li>
-                            <li class="list-group-item d-flex justify-content-between">Fashion <span class="badge bg-light text-dark">12 Items</span></li>
+                            {% for cat in categories %}
+                            <li class="list-group-item d-flex justify-content-between">{{ cat.name }}</li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
@@ -147,15 +178,13 @@
 
         <div id="viewOrders" class="content-section">
             <h3 class="fw-bold mb-4">Order Management</h3>
-            <div class="card p-4">
+            <div class="card p-4 shadow">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover align-middle">
                         <thead>
                             <tr>
                                 <th>Order ID</th>
                                 <th>Customer</th>
-                                <th>Products</th>
-                                <th>Amount</th>
                                 <th>Status</th>
                                 <th>Date</th>
                                 <th>Action</th>
@@ -166,94 +195,14 @@
                         <tr>
                             <td>#{{ order.order_id }}</td>
                             <td>{{ order.user.username }}</td>
-                            <td>
-                                {% for item in order.products.all %}
-                                    {{ item.product.name }} (x{{ item.quantity }})<br>
-                                {% endfor %}
-                            </td>
-                            <td>₹{{ order.amount }}</td>
-                            <td>
-                                {% if order.delivery_status == "Pending" %}
-                                    <span class="badge bg-secondary">Pending</span>
-                                {% elif order.delivery_status == "Shipped" %}
-                                    <span class="badge bg-info">Shipped</span>
-                                {% elif order.delivery_status == "Delivered" %}
-                                    <span class="badge bg-success">Delivered</span>
-                                {% elif order.delivery_status == "Cancelled" %}
-                                    <span class="badge bg-danger">Cancelled</span>
-                                {% endif %}
-                            </td>
+                            <td><span class="badge bg-secondary">{{ order.delivery_status }}</span></td>
                             <td>{{ order.ordered_date|date:"d M Y" }}</td>
-                            <td>
-                                <a href="#" class="btn btn-sm btn-outline-primary">View</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="7" class="text-center">No Orders Found</td>
+                            <td><a href="#" class="btn btn-sm btn-outline-primary">View</a></td>
                         </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
-                
-                <!-- Order Summary Cards -->
-                <div class="row g-3 mt-4">
-                    <div class="col-md-3">
-                        <div class="card p-3 bg-light shadow-sm">
-                            <h6 class="text-muted">Total Orders</h6>
-                            <h3 class="mb-0">{{ total_orders }}</h3>
-                            <small class="text-success">All time</small>
-                        </div>
-                    </div>
-                
-                    <div class="col-md-3">
-                        <div class="card p-3 bg-light shadow-sm">
-                            <h6 class="text-muted">Pending Orders</h6>
-                            <h3 class="mb-0">{{ pending_orders }}</h3>
-                            <small class="text-warning">Awaiting processing</small>
-                        </div>
-                    </div>
-                
-                    <div class="col-md-3">
-                        <div class="card p-3 bg-light shadow-sm">
-                            <h6 class="text-muted">Completed Orders</h6>
-                            <h3 class="mb-0">{{ completed_orders }}</h3>
-                            <small class="text-success">Delivered</small>
-                        </div>
-                    </div>
-                
-                    <div class="col-md-3">
-                        <div class="card p-3 bg-light shadow-sm">
-                            <h6 class="text-muted">Cancelled Orders</h6>
-                            <h3 class="mb-0">{{ cancelled_orders }}</h3>
-                            <small class="text-danger">Refund processed</small>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Pagination -->
-                <nav class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                        </li>
-                        {% endif %}
-
-                        {% for num in page_obj.paginator.page_range %}
-                        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                        </li>
-                        {% endfor %}
-
-                        {% if page_obj.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                        </li>
-                        {% endif %}
-                    </ul>
-                </nav>
             </div>
         </div>
 
@@ -261,18 +210,32 @@
 
     <script>
         function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            // Show selected section
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
-            
-            // Update Sidebar Active State
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const activeLink = document.getElementById('nav-' + sectionId);
+            if(activeLink) activeLink.classList.add('active');
+        }
+
+        // Image Preview Logic
+        const imageInput = document.querySelector('input[type="file"]');
+        if(imageInput) {
+            imageInput.onchange = evt => {
+                const [file] = imageInput.files;
+                if (file) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = URL.createObjectURL(file);
+                    preview.style.display = 'block';
+                }
+            }
+        }
+
+        // Auto-switch to Add Product if editing
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('edit') || params.has('delete')) {
+                showSection('addProduct');
+            }
         }
     </script>
 </body>
