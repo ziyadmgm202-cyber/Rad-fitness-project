@@ -254,22 +254,10 @@
                     </div>
 
                     <p class="text-muted mb-4">
-                        Engineered for ultimate durability and grip. The Hex-Grip Pro series features a vulcanized rubber coating to protect your floors and a contoured chrome handle for maximum comfort during intense workouts.
+                        {{pro.description}}
                     </p>
 
                     <div class="feature-grid">
-                        <div class="feature-pill">
-                            <i class="fa-solid fa-weight-hanging"></i>
-                            <span class="feature-text">Weight: 10kg</span>
-                        </div>
-                        <div class="feature-pill">
-                            <i class="fa-solid fa-shield-halved"></i>
-                            <span class="feature-text">Rust Proof</span>
-                        </div>
-                        <div class="feature-pill">
-                            <i class="fa-solid fa-hand-fist"></i>
-                            <span class="feature-text">Anti-Slip Grip</span>
-                        </div>
                         <div class="feature-pill">
                             <i class="fa-solid fa-truck-fast"></i>
                             <span class="feature-text">Fast Delivery</span>
@@ -277,7 +265,7 @@
                     </div>
 
                     <div class="d-flex gap-3">
-                        <a class="btn-gym-primary" href="{% url 'addtocart' pro.id %}">
+                        <a class="btn-gym-primary text-decoration-none" href="{% url 'addtocart' pro.id %}">
                             <i class="fa-solid fa-cart-shopping me-2"></i> Add to Cart
                         </a>
                     </div>
